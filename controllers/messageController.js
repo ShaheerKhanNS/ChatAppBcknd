@@ -28,7 +28,7 @@ exports.getMessage = async (req, res) => {
       },
     });
 
-    res.send(200).json({
+    res.status(200).json({
       status: "success",
       data: messages,
     });
