@@ -1,4 +1,7 @@
 const Message = require("../models/messageModel");
+const Sequelize = require("sequelize");
+
+const Op = Sequelize.Op;
 
 exports.createMessage = async (req, res) => {
   try {
@@ -20,11 +23,15 @@ exports.createMessage = async (req, res) => {
 
 exports.getMessage = async (req, res) => {
   try {
-    const id = req.user.id;
+    const userid = req.user.id;
 
+    const lastMessage = +req.query.lastmessageid || -1;
+    console.log(lastMessage);
     const messages = await Message.findAll({
       where: {
-        userid: id,
+        id: { [Op.gt]: lastMessage },
+
+        userid,
       },
     });
 
