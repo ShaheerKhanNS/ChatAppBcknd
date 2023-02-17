@@ -3,6 +3,8 @@ const authController = require("../controllers/authController");
 const groupController = require("../controllers/groupController");
 
 const router = express.Router();
+
+router.route("/").get(authController.currentUser, groupController.getAllGroups);
 router
   .route("/creategroup")
   .post(authController.currentUser, groupController.createGroup);
@@ -10,5 +12,9 @@ router
 router
   .route("/adduser")
   .post(authController.currentUser, groupController.addUserToGroup);
+
+router
+  .route("/deleteuser")
+  .post(authController.currentUser, groupController.deleteUser);
 
 module.exports = router;

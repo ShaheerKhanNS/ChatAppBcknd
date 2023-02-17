@@ -77,3 +77,29 @@ exports.addUserToGroup = async (req, res) => {
     });
   }
 };
+
+exports.deleteUser = async (req, res) => {
+  try {
+    /* 1)Find whether group exists and member 
+  2) check whether he has permission to delete 
+    */
+  } catch (err) {}
+};
+
+exports.getAllGroups = async (req, res) => {
+  try {
+    // Using sequelize magic functions which is available because we defined a relation between the table.
+    const groups = await req.user.getGroups({
+      attributes: ["id", "groupName"],
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: groups,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "fail",
+    });
+  }
+};
