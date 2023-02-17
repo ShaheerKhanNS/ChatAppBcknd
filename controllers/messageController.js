@@ -1,14 +1,14 @@
 const Message = require("../models/messageModel");
-const Sequelize = require("sequelize");
-
-const Op = Sequelize.Op;
+const { Op } = require("sequelize");
 
 exports.createMessage = async (req, res) => {
   try {
     const { message } = req.body;
+    console.log(message);
     await Message.create({
       message,
-      userid: req.user.id,
+      userId: req.user.id,
+      groupid: 1,
     });
     res.status(200).json({
       status: "success",
@@ -23,15 +23,14 @@ exports.createMessage = async (req, res) => {
 
 exports.getMessage = async (req, res) => {
   try {
-    const userid = req.user.id;
-
+    const userId = req.user.id;
     const lastMessage = +req.query.lastmessageid || -1;
-    console.log(lastMessage);
+
     const messages = await Message.findAll({
       where: {
         id: { [Op.gt]: lastMessage },
 
-        userid,
+        userId,
       },
     });
 
@@ -40,6 +39,7 @@ exports.getMessage = async (req, res) => {
       data: messages,
     });
   } catch (err) {
+    console.log("I am in errorblock");
     console.log(JSON.stringify(err));
     res.status(500).json({
       status: "fail",

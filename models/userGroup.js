@@ -1,16 +1,23 @@
+/*
+
+for many to many relations we need an in between table
+
+*/
+
 const Sequelize = require("sequelize");
 const sequelize = require("../utils/database");
 
-const Message = sequelize.define("messages", {
+const userGroup = sequelize.define("user-group", {
   id: {
     type: Sequelize.INTEGER,
     allowNull: false,
     primaryKey: true,
     autoIncrement: true,
   },
-  message: {
-    type: Sequelize.STRING,
+  admin: {
+    type: Sequelize.BOOLEAN,
+    default: false,
   },
 });
 
-module.exports = Message;
+module.exports = userGroup;
