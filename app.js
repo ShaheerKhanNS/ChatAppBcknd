@@ -33,9 +33,6 @@ Message.belongsTo(User);
 User.belongsToMany(Group, { through: userGroup });
 Group.belongsToMany(User, { through: userGroup });
 
-Group.hasMany(Message);
-Message.belongsTo(Group);
-
 sequelize
   .sync()
   .then((res) => {

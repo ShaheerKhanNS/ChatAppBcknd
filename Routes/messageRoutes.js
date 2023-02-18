@@ -5,7 +5,11 @@ const authController = require("../controllers/authController");
 const router = express.Router();
 router
   .route("/")
-  .get(authController.currentUser, messageController.getMessage)
+
   .post(authController.currentUser, messageController.createMessage);
+
+router
+  .route("/:groupId")
+  .get(authController.currentUser, messageController.getMessage);
 
 module.exports = router;
