@@ -1,0 +1,28 @@
+body {
+  background-color: #b2f2bb;
+}
+.main-container {
+  margin-top: 70px;
+}
+button {
+  margin-top: 20px;
+}
+.error {
+  margin-top: 20px;
+  color: red;
+}
+a {
+  text-decoration: none;
+  color: #087f5b;
+  margin-top: 25px;
+}
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+h4 {
+  color: #1971c2;
+}
+h3 {
+  color: #1864ab;
+}

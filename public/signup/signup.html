@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://img.icons8.com/color/256/weixing.png"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="../style/signup.css" />
+    <title>Signup</title>
+  </head>
+  <body>
+    <div class="main-container">
+      <div class="container">
+        <h3>Create profile</h3>
+        <h4>Connect with your friends today!</h4>
+      </div>
+      <div class="container">
+        <form>
+          <label for="name" class="form-label">Name:</label>
+          <input type="text" class="form-control" id="name" required />
+          <label for="email" class="form-label">Email:</label>
+          <input type="email" class="form-control" id="email" required />
+          <label for="phonenumber" class="form-label">PhoneNumber:</label>
+          <input
+            type="tel"
+            class="form-control"
+            id="phonenumber"
+            pattern="[0-9]{5}-[0-9]{5}"
+            required
+          />
+          <label for="password" class="form-label">Password:</label>
+          <input id="password" type="password" class="form-control" required />
+          <div class="buttons">
+            <button id="signup" class="btn btn-outline-success">Signup</button>
+            <a href="http://127.0.0.1:3000/login/login.html">Existing user😎</a>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.2/axios.min.js"
+      integrity="sha512-NCiXRSV460cHD9ClGDrTbTaw0muWUBf/zB/yLzJavRsPNUl9ODkUVmUHsZtKu17XknhsGlmyVoJxLg/ZQQEeGA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="../js/signup.js"></script>
+  </body>
+</html>

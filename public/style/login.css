@@ -1,0 +1,35 @@
+body {
+  background-color: #b2f2bb;
+}
+#login {
+  margin-top: 20px;
+}
+.main {
+  margin-top: 101px;
+  width: 743px;
+  height: auto;
+  margin-left: 458px;
+}
+form {
+  margin-top: 20px;
+}
+.error {
+  color: red;
+}
+a {
+  text-decoration: none;
+  color: #ff8787;
+  /* display: flex;
+        justify-content: center; */
+  margin-top: 25px;
+}
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+h4 {
+  color: #1971c2;
+}
+h3 {
+  color: #1864ab;
+}
