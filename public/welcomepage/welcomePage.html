@@ -60,14 +60,24 @@
           <div id="group-message-div" class="chat-messages">
             <!-- More messages go here -->
           </div>
-          <div class="chat-input">
-            <input
-              id="groupMessage"
-              type="text"
-              placeholder="Type a message..."
-            />
-            <button id="btn-sendMessage">Send</button>
-          </div>
+          <form enctype="multipart/form-data">
+            <div class="chat-input">
+              <input
+                id="groupMessage"
+                type="text"
+                placeholder="Type a message..."
+              />
+              <input
+                id="image"
+                type="file"
+                accept="image/*"
+                name="image"
+                class="form-control form-control-sm"
+                style="width: 200px; margin-right: 5px"
+              />
+              <button id="btn-sendMessage">Send</button>
+            </div>
+          </form>
         </div>
 
         <form id="form-el" class="card-model">

@@ -1,30 +1,23 @@
 const Message = require("../models/messageModel");
-const { Op } = require("sequelize");
+const multer = require("multer");
 
-// exports.createMessage = async (req, res) => {
-//   try {
-//     const { message } = req.body;
-//     console.log(message);
-//     await Message.create({
-//       message,
-//       userId: req.user.id,
-//       groupid: 1,
-//     });
-//     res.status(200).json({
-//       status: "success",
-//     });
-//   } catch (err) {
-//     console.log(JSON.stringify(err));
-//     res.status(500).json({
-//       status: "fail",
-//     });
-//   }
-// };
+const { uploadFile, uploadFileS3 } = require("../s3services");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
-// We had updated our app so lets leave the old code behind and work on new code
+exports.uploadImage = upload.single("image");
 
 exports.createMessage = async (req, res) => {
   try {
+    const file = req.file;
+    console.log(file);
+
+    // const imageUpload = await uploadFile(file);
+
+    // console.log(imageUpload);
+
+    const newImage = await uploadFileS3(file);
+
     const { message, groupId } = req.body;
 
     await req.user.createMessage({
@@ -38,9 +31,10 @@ exports.createMessage = async (req, res) => {
       message: "Message created successfully",
     });
   } catch (err) {
-    console.log(JSON.stringify(err));
+    console.log(`Iam in createmessage errorblock`, err);
     res.status(500).json({
       status: "fail",
+      data: err,
     });
   }
 };
@@ -76,8 +70,8 @@ exports.getMessage = async (req, res) => {
     const { groupId } = req.params;
     console.log(typeof groupId, groupId, req.params);
     const messages = await Message.findAll({
-      limit: 15,
-      order: [["updatedAt", "ASC"]],
+      limit: 10,
+      order: [["updatedAt", "DESC"]],
       where: {
         groupId,
       },
@@ -86,7 +80,7 @@ exports.getMessage = async (req, res) => {
 
     res.status(200).json({
       status: "success",
-      data: messages,
+      data: messages.reverse(), // To get the message in correct order
     });
   } catch (err) {
     console.log(JSON.stringify(err));

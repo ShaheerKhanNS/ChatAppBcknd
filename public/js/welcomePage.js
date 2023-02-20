@@ -1,4 +1,9 @@
+// Importing socket io client for realtime connection
+
+// const { io } = require("socket.io-client");
+
 //  btnCreateGroup is an Btn element used to show group creation form
+
 const btnCreateGroup = document.getElementById("createGroup");
 const btnLogout = document.getElementById("logout");
 const btnClose = document.getElementById("close");
@@ -12,6 +17,8 @@ const addUserBtn = document.getElementById("btn-add-user");
 const token = localStorage.getItem("token");
 
 const URL = "http://127.0.0.1:3000";
+
+// const socket = io(`${URL}`);
 
 // Elements
 const formEL = document.getElementById("form-el");
@@ -207,19 +214,28 @@ groupContainer.addEventListener("click", (e) => {
 
 const sendMsgBtn = document.getElementById("btn-sendMessage");
 
-sendMsgBtn.addEventListener("click", async () => {
+sendMsgBtn.addEventListener("click", async (e) => {
   try {
+    // Currently we will allow only users either to send a text message or image at a time!
+    e.preventDefault();
+
+    const form = new FormData();
+    form.append("message", document.getElementById("groupMessage").value);
+    form.append("image", document.getElementById("image").files[0]);
+    form.append("groupId", groupId);
     const message = document.getElementById("groupMessage").value;
-    console.log(`Button clicked on group ${groupId}`, message);
+    const image = document.getElementById("image").files[0];
+
+    // if (image) {
+    //   message = "";
+    // }
+    console.log(`Button clicked on group ${groupId}`, form);
 
     const response = await axios({
       method: "POST",
       url: `${URL}/api/v1/message`,
       headers: { Authorization: token },
-      data: {
-        message,
-        groupId,
-      },
+      data: form,
     });
 
     if (response.status === 200) {

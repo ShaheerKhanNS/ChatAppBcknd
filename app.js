@@ -44,15 +44,18 @@ Message.belongsTo(User);
 User.belongsToMany(Group, { through: userGroup });
 Group.belongsToMany(User, { through: userGroup });
 
-// Using socket io to establish a continuous connection between server and client
-
-const io = require("socket.io")(process.env.PORT);
-
 sequelize
   .sync()
   .then((res) => {
-    app.listen(process.env.PORT, () => {
+    // Using socekt io to establish connection.
+
+    const server = app.listen(process.env.PORT, () => {
       console.log(`App running on ${process.env.PORT}`);
+      const io = require("socket.io")(server);
+
+      io.on("connection", (socket) => {
+        console.log(socket.id);
+      });
     });
   })
   .catch((err) => {
