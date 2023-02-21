@@ -9,9 +9,11 @@ dotenv.config({ path: "./config.env" });
 const userRouter = require("./Routes/userRoutes");
 const messageRouter = require("./Routes/messageRoutes");
 const groupRouter = require("./Routes/groupRoutes");
+const passwordRouter = require("./Routes/passwordRoutes");
 const sequelize = require("./utils/database");
 const User = require("./models/userModel");
 const Message = require("./models/messageModel");
+const PasswordModel = require("./models/forgotPasswordModel");
 const Group = require("./models/groupModel");
 const userGroup = require("./models/userGroup");
 const app = express();
@@ -27,6 +29,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/message", messageRouter);
 app.use("/api/v1/group", groupRouter);
+app.use("/api/v1/password", passwordRouter);
+
 app.use((req, res) => {
   res
     .setHeader(
@@ -40,6 +44,9 @@ app.use((req, res) => {
 
 User.hasMany(Message);
 Message.belongsTo(User);
+
+User.hasMany(PasswordModel);
+PasswordModel.belongsTo(User);
 
 User.belongsToMany(Group, { through: userGroup });
 Group.belongsToMany(User, { through: userGroup });

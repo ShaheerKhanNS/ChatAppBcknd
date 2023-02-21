@@ -1,7 +1,7 @@
 const Message = require("../models/messageModel");
 const multer = require("multer");
 
-const { uploadFile, uploadFileS3 } = require("../s3services");
+const { uploadFileS3 } = require("../s3services");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -10,14 +10,9 @@ exports.uploadImage = upload.single("image");
 exports.createMessage = async (req, res) => {
   try {
     const file = req.file;
-    console.log(file);
-
-    // const imageUpload = await uploadFile(file);
-
-    // console.log(imageUpload);
 
     const newImage = await uploadFileS3(file);
-
+    console.log(newImage);
     const { message, groupId } = req.body;
 
     await req.user.createMessage({

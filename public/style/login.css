@@ -33,3 +33,7 @@ h4 {
 h3 {
   color: #1864ab;
 }
+
+.password-reset-div {
+  display: none;
+}
