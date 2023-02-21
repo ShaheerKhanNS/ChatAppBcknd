@@ -1,19 +1,25 @@
 const Message = require("../models/messageModel");
 const multer = require("multer");
 
-const { uploadFileS3 } = require("../s3services");
+const { uploadFileS3, signedUrl } = require("../s3services");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+// Middleware used to get the file
 exports.uploadImage = upload.single("image");
 
 exports.createMessage = async (req, res) => {
   try {
     const file = req.file;
+    let message = req.body.message;
+    const { groupId } = req.body;
+    if (file) {
+      await uploadFileS3(file);
 
-    const newImage = await uploadFileS3(file);
-    console.log(newImage);
-    const { message, groupId } = req.body;
+      const url = await signedUrl();
+      console.log(url);
+      message = url;
+    }
 
     await req.user.createMessage({
       message,

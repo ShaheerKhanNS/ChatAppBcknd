@@ -16,7 +16,7 @@ const addUserBtn = document.getElementById("btn-add-user");
 
 const token = localStorage.getItem("token");
 
-const URL = "http://127.0.0.1:3000";
+const url = "http://127.0.0.1:3000";
 
 // const socket = io(`${URL}`);
 
@@ -41,7 +41,7 @@ btnLogout.addEventListener("click", (e) => {
   alert("Are you sure you want to logout😥");
   localStorage.clear();
   // window.location.replace("http://127.0.0.1:8080/html/login.html");
-  window.location.replace(`${URL}/login/login.html`);
+  window.location.replace(`${url}/login/login.html`);
 });
 
 btngroupCreate.addEventListener("click", async (e) => {
@@ -51,7 +51,7 @@ btngroupCreate.addEventListener("click", async (e) => {
     if (groupName) {
       await axios({
         method: "POST",
-        url: `${URL}/api/v1/group/creategroup`,
+        url: `${url}/api/v1/group/creategroup`,
         headers: { Authorization: token },
         data: { groupName },
       });
@@ -94,7 +94,7 @@ addUserBtn.addEventListener("click", async (e) => {
 
     const response = await axios({
       method: "POST",
-      url: `${URL}/api/v1/group/adduser`,
+      url: `${url}/api/v1/group/adduser`,
       headers: { Authorization: token },
       data: {
         groupName,
@@ -121,7 +121,7 @@ const groups = async () => {
   try {
     const groups = await axios({
       method: "GET",
-      url: `${URL}/api/v1/group`,
+      url: `${url}/api/v1/group`,
       headers: { Authorization: token },
     });
 
@@ -157,7 +157,20 @@ closechatBtn.addEventListener("click", (e) => {
   closechatBtn.classList.add("card-model");
 });
 
-// Rendering Messages
+// Rendering Messages Since we have allowed users to send photos we need to consider that also
+
+const renderImage = (userName, image) => {
+  const template = `<div id="group-message-div" class="chat-messages">
+            <div class="message">
+              <div class="message-author">${userName}</div>
+              <img
+                class="chat-message-img"
+                src=${image}
+                alt="Image sent by ${userName}"
+              />
+            </div>`;
+  msgDsplBox.innerHTML += template;
+};
 
 const renderMessage = (userName, message) => {
   const template = `<div class="message">
@@ -170,13 +183,28 @@ const renderMessage = (userName, message) => {
   msgDsplBox.innerHTML += template;
 };
 
+// Function to check whether the incoming message is url; We also need to look only for our urls so that our users can send other urls without eny errors
+
+const validURL = (data) => {
+  try {
+    const url = new URL(data.message);
+    if (url.hostname === "chatapp1.s3.ap-northeast-1.amazonaws.com") {
+      renderImage(data.userName, data.message);
+    } else {
+      renderMessage(data.userName, data.message);
+    }
+  } catch (err) {
+    renderMessage(data.userName, data.message);
+  }
+};
+
 // Retriving messages
 
 const retriveMessages = async () => {
   try {
     const messages = await axios({
       method: "GET",
-      url: `${URL}/api/v1/message/${groupId}`,
+      url: `${url}/api/v1/message/${groupId}`,
       headers: { Authorization: token },
     });
 
@@ -185,12 +213,20 @@ const retriveMessages = async () => {
     grpName.textContent = groupNameRender;
     // To remove the previous clutter
     msgDsplBox.innerHTML = "";
+    // messages.data.data.forEach((data) => {
+    //   if (validURL(data.message)) {
+    //     renderImage(data.userName, data.message);
+    //   } else {
+    //     renderMessage(data.userName, data.message);
+    //   }
+    // });
     messages.data.data.forEach((data) => {
-      renderMessage(data.userName, data.message);
+      validURL(data);
     });
   } catch (err) {
     console.log(
-      `I am in error block of retriving messages ${JSON.stringify(err)}`
+      `I am in error block of retriving messages ${JSON.stringify(err)}`,
+      err
     );
   }
 };
@@ -223,23 +259,16 @@ sendMsgBtn.addEventListener("click", async (e) => {
     form.append("message", document.getElementById("groupMessage").value);
     form.append("image", document.getElementById("image").files[0]);
     form.append("groupId", groupId);
-    const message = document.getElementById("groupMessage").value;
-    const image = document.getElementById("image").files[0];
-
-    // if (image) {
-    //   message = "";
-    // }
-    console.log(`Button clicked on group ${groupId}`, form);
 
     const response = await axios({
       method: "POST",
-      url: `${URL}/api/v1/message`,
+      url: `${url}/api/v1/message`,
       headers: { Authorization: token },
       data: form,
     });
 
     if (response.status === 200) {
-      document.getElementById("groupMessage").value = "";
+      document.getElementById("form-data").reset();
     } else {
       alert("Something went wrong try aftersometime");
     }

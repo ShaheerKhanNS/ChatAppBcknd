@@ -80,3 +80,16 @@ body {
 .chat-input button:active {
   background-color: #3e8e41;
 }
+
+.chat-message {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.chat-message-img {
+  width: 350px;
+  height: 350px;
+  border-radius: 6%;
+  margin-right: 10px;
+}
