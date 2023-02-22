@@ -9,13 +9,10 @@ const btngroupCreate = document.getElementById("create-group");
 const editGroupBtn = document.getElementById("editGroup-display");
 const editCloseBtn = document.getElementById("closeBtn");
 const addUserBtn = document.getElementById("btn-add-user");
+const dltUserBtn = document.getElementById("btn-dlt-user");
 
 const token = localStorage.getItem("token");
-
 const url = "http://127.0.0.1:3000";
-
-//
-
 const socket = io(`${url}`);
 
 // Elements
@@ -83,6 +80,8 @@ const clearFields = () => {
   document.getElementById("isAdmin").checked = false;
 };
 
+// Add user
+
 addUserBtn.addEventListener("click", async (e) => {
   try {
     e.preventDefault();
@@ -110,6 +109,30 @@ addUserBtn.addEventListener("click", async (e) => {
     }
   } catch (err) {
     console.log(`I am in adduser error block ${JSON.stringify(err)}`);
+  }
+});
+
+// DeleteUser
+
+dltUserBtn.addEventListener("click", async (e) => {
+  try {
+    e.preventDefault();
+    const groupName = document.getElementById("groupname-add").value;
+    const email = document.getElementById("email-joinee").value;
+
+    const response = await axios({
+      method: "POST",
+      url: `${url}/api/v1/group/deleteuser`,
+      headers: { Authorization: token },
+      data: {
+        groupName,
+        email,
+      },
+    });
+
+    console.log(response);
+  } catch (err) {
+    console.log(err);
   }
 });
 

@@ -90,8 +90,8 @@ exports.deleteUser = async (req, res) => {
 
     const userId = +req.user.id; //Id of the logged in user
     const groupId = group.id;
-    // Check whether the current user has permission to remove
 
+    // Check whether the current user has permission to remove
     const permissionStatus = await userGroup.findOne({
       where: {
         admin: true,
