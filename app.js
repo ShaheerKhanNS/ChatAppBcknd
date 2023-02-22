@@ -36,7 +36,7 @@ app.use((req, res) => {
     .setHeader(
       "Content-Security-Policy",
 
-      "script-src https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.2/axios.min.js https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js http://127.0.0.1:3000/js/signup.js http://127.0.0.1:3000/js/login.js http://127.0.0.1:3000/js/welcomePage.js",
+      "script-src https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.2/axios.min.js https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js http://127.0.0.1:3000/js/signup.js http://127.0.0.1:3000/js/login.js http://127.0.0.1:3000/js/welcomePage.js http://127.0.0.1:3000/socket.io/socket.io.js",
       "img-src  https://img.icons8.com/color/256/weixing.png"
     )
     .sendFile(path.join(__dirname, `public${req.url}`));
@@ -58,14 +58,23 @@ sequelize
 
     const server = app.listen(process.env.PORT, () => {
       console.log(`App running on ${process.env.PORT}`);
-      const io = require("socket.io")(server);
 
+      // In newer version of socket.io we need to use allowEO3 to true;default value is zero.In order to prevent unsupported protocol version.
+
+      const io = require("socket.io")(server, {
+        cors: {
+          origin: ["http://127.0.0.1:3000"],
+        },
+        allowEIO3: true,
+      });
       io.on("connection", (socket) => {
-        console.log(socket.id);
+        socket.on("message-send", (groupId) => {
+          // console.log("###################", groupId);
+          io.emit("message-recieved", groupId);
+        });
       });
     });
   })
   .catch((err) => {
-    console.log(JSON.stringify(err));
-    console.log(err.message);
+    console.log(err);
   });

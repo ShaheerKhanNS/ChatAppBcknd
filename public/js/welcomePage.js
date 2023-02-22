@@ -1,7 +1,3 @@
-// Importing socket io client for realtime connection
-
-// const { io } = require("socket.io-client");
-
 //  btnCreateGroup is an Btn element used to show group creation form
 
 const btnCreateGroup = document.getElementById("createGroup");
@@ -18,7 +14,9 @@ const token = localStorage.getItem("token");
 
 const url = "http://127.0.0.1:3000";
 
-// const socket = io(`${URL}`);
+//
+
+const socket = io(`${url}`);
 
 // Elements
 const formEL = document.getElementById("form-el");
@@ -103,8 +101,6 @@ addUserBtn.addEventListener("click", async (e) => {
       },
     });
 
-    console.log(response.status);
-
     if (response.status === 200) {
       alert("User added to your group");
       clearFields();
@@ -155,6 +151,10 @@ closechatBtn.addEventListener("click", (e) => {
   chatContainerBox.classList.remove("chat-container");
   chatContainerBox.classList.add("card-model");
   closechatBtn.classList.add("card-model");
+
+  // For socket optimization we make sure that our current user is not available on any groups
+
+  groupId = undefined;
 });
 
 // Rendering Messages Since we have allowed users to send photos we need to consider that also
@@ -185,7 +185,7 @@ const renderMessage = (userName, message) => {
 
 // Function to check whether the incoming message is url; We also need to look only for our urls so that our users can send other urls without eny errors
 
-const validURL = (data) => {
+const messageRender = (data) => {
   try {
     const url = new URL(data.message);
     if (url.hostname === "chatapp1.s3.ap-northeast-1.amazonaws.com") {
@@ -213,21 +213,12 @@ const retriveMessages = async () => {
     grpName.textContent = groupNameRender;
     // To remove the previous clutter
     msgDsplBox.innerHTML = "";
-    // messages.data.data.forEach((data) => {
-    //   if (validURL(data.message)) {
-    //     renderImage(data.userName, data.message);
-    //   } else {
-    //     renderMessage(data.userName, data.message);
-    //   }
-    // });
+
     messages.data.data.forEach((data) => {
-      validURL(data);
+      messageRender(data);
     });
   } catch (err) {
-    console.log(
-      `I am in error block of retriving messages ${JSON.stringify(err)}`,
-      err
-    );
+    console.log(`I am in error block of retriving messages ${err}`);
   }
 };
 
@@ -267,6 +258,8 @@ sendMsgBtn.addEventListener("click", async (e) => {
       data: form,
     });
 
+    socket.emit("message-send", groupId);
+
     if (response.status === 200) {
       document.getElementById("form-data").reset();
     } else {
@@ -277,4 +270,10 @@ sendMsgBtn.addEventListener("click", async (e) => {
       `I am in error block of sending message ${JSON.stringify(err)}`
     );
   }
+});
+
+// Using socket.io for realtime working need to call the server when only any user send a message;
+
+socket.on("message-recieved", (id) => {
+  if (groupId == +id) retriveMessages();
 });
