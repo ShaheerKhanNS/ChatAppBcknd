@@ -1,6 +1,7 @@
 const Group = require("../models/groupModel");
 const User = require("../models/userModel");
 const UserGroup = require("../models/userGroup");
+const userGroup = require("../models/userGroup");
 
 exports.createGroup = async (req, res) => {
   try {
@@ -80,10 +81,59 @@ exports.addUserToGroup = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
   try {
-    /* 1)Find whether group exists and member 
-  2) check whether he has permission to delete 
-    */
-  } catch (err) {}
+    const { groupName, email } = req.body;
+    const group = await Group.findOne({
+      where: {
+        groupName,
+      },
+    });
+
+    const userId = +req.user.id; //Id of the logged in user
+    const groupId = group.id;
+    // Check whether the current user has permission to remove
+
+    const permissionStatus = await userGroup.findOne({
+      where: {
+        admin: true,
+        groupId,
+        userId,
+      },
+    });
+
+    if (permissionStatus) {
+      const userToBeRemoved = await User.findOne({ where: { email } });
+
+      if (!userToBeRemoved)
+        return res.status(400).json({
+          status: "fail",
+          message: "Please check the email-id of the user you provided",
+        });
+
+      const removedStatus = await userGroup.destroy({
+        where: {
+          userId: userToBeRemoved.id,
+        },
+      });
+
+      if (removedStatus) {
+        return res.send(200).json({
+          status: "success",
+          message: "user removed successfully",
+        });
+      } else {
+        return res.status(400).json({
+          status: "fail",
+          message: "user not in the group",
+        });
+      }
+    }
+    return res.status(401).json({
+      status: "fail",
+      message: "Unauthorized",
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 exports.getAllGroups = async (req, res) => {
