@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../utils/database");
 
-const Message = sequelize.define("messages", {
+const ArchivedChat = sequelize.define("archivedchats", {
   id: {
     type: Sequelize.INTEGER,
     allowNull: false,
@@ -20,6 +20,14 @@ const Message = sequelize.define("messages", {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  deletedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+  userId: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+  },
 });
 
-module.exports = Message;
+module.exports = ArchivedChat;

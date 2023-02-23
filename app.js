@@ -6,16 +6,24 @@ const bodyParser = require("body-parser");
 const path = require("path");
 
 dotenv.config({ path: "./config.env" });
+
+// Routes
 const userRouter = require("./Routes/userRoutes");
 const messageRouter = require("./Routes/messageRoutes");
 const groupRouter = require("./Routes/groupRoutes");
 const passwordRouter = require("./Routes/passwordRoutes");
+
+// Database
 const sequelize = require("./utils/database");
+
+// Models
 const User = require("./models/userModel");
 const Message = require("./models/messageModel");
 const PasswordModel = require("./models/forgotPasswordModel");
 const Group = require("./models/groupModel");
 const userGroup = require("./models/userGroup");
+
+// Starting app
 const app = express();
 
 app.use(
@@ -44,10 +52,30 @@ app.use("/chat", (req, res) => {
 
 // For handling routes which are not defined
 
-app.all("*", (req, res) => {
-  res.status(404).json({
-    status: "fail",
-    message: `Can not find the requested ${req.originalUrl} url on this server.`,
+app.all("*", (req, res, next) => {
+  // res.status(404).json({
+  //   status: "fail",
+  //   message: `Can not find the requested ${req.originalUrl} url on this server.`,
+  // });
+
+  const err = new Error(
+    `Can not find the requested ${req.originalUrl} url on this server.`
+  );
+  err.status = "fail";
+  err.statusCode = 404;
+  // When we pass err object to next it will skip all the stacks and moves to error middleware function
+  next(err);
+});
+
+// Express error handling
+
+app.use((err, req, res, next) => {
+  err.statusCode = err.statusCode || 500;
+  err.status = err.status || "fail";
+
+  res.status(err.statusCode).jon({
+    status: err.status,
+    message: err.message,
   });
 });
 
@@ -78,7 +106,6 @@ sequelize
       });
       io.on("connection", (socket) => {
         socket.on("message-send", (groupId) => {
-          // console.log("###################", groupId);
           io.emit("message-recieved", groupId);
         });
       });
