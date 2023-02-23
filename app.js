@@ -31,15 +31,24 @@ app.use("/api/v1/message", messageRouter);
 app.use("/api/v1/group", groupRouter);
 app.use("/api/v1/password", passwordRouter);
 
-app.use((req, res) => {
+app.use("/chat", (req, res) => {
   res
     .setHeader(
       "Content-Security-Policy",
 
-      "script-src https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.2/axios.min.js https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js http://127.0.0.1:3000/js/signup.js http://127.0.0.1:3000/js/login.js http://127.0.0.1:3000/js/welcomePage.js http://127.0.0.1:3000/socket.io/socket.io.js",
+      "script-src https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.2/axios.min.js https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js http://127.0.0.1:3000/chat/js/signup.js http://127.0.0.1:3000/chat/js/login.js http://127.0.0.1:3000/chat/js/welcomePage.js http://127.0.0.1:3000/socket.io/socket.io.js",
       "img-src  https://img.icons8.com/color/256/weixing.png"
     )
     .sendFile(path.join(__dirname, `public${req.url}`));
+});
+
+// For handling routes which are not defined
+
+app.all("*", (req, res) => {
+  res.status(404).json({
+    status: "fail",
+    message: `Can not find the requested ${req.originalUrl} url on this server.`,
+  });
 });
 
 User.hasMany(Message);

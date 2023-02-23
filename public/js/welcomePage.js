@@ -36,7 +36,7 @@ btnLogout.addEventListener("click", (e) => {
   alert("Are you sure you want to logout😥");
   localStorage.clear();
   // window.location.replace("http://127.0.0.1:8080/html/login.html");
-  window.location.replace(`${url}/login/login.html`);
+  window.location.replace(`${url}/chat/login/login.html`);
 });
 
 btngroupCreate.addEventListener("click", async (e) => {

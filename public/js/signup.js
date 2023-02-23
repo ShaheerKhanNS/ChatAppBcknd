@@ -31,7 +31,7 @@ btnSignup.addEventListener("click", async (e) => {
     clearFields();
     alert("User Successfully created!");
     // window.location.replace("http://127.0.0.1:3000/login/login.html");
-    window.location.replace(`${URL}/login/login.html`);
+    window.location.replace(`${URL}/chat/login/login.html`);
   } catch (err) {
     document.body.innerHTML += `<p class="error container">User with given email or phone number exists,Try to login or use forgot password🚫</p>`;
   }

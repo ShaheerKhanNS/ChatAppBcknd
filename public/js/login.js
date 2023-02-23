@@ -23,7 +23,7 @@ btnLogin.addEventListener("click", async (e) => {
         localStorage.setItem("token", response.data.token);
         alert(response.data.message);
         window.location.replace(
-          "http://127.0.0.1:3000/welcomepage/welcomePage.html"
+          "http://127.0.0.1:3000/chat/welcomepage/welcomePage.html"
         );
       }
     } else {
