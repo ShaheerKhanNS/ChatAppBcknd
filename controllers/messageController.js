@@ -1,7 +1,7 @@
 const Message = require("../models/messageModel");
 const multer = require("multer");
 
-const { uploadFileS3, signedUrl } = require("../s3services");
+const { uploadFileS3, signedUrl } = require("../S3service/s3services");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 

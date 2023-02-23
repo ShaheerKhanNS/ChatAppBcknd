@@ -29,11 +29,29 @@ exports.createGroup = async (req, res) => {
 
 exports.addUserToGroup = async (req, res) => {
   try {
+    // Before adding any memmbers we need to validate whether he has the rights to do so by checking he is a admin of the group
+
     const { groupName, email, isAdmin } = req.body;
     //  check whether the user and group exist and also need to check whether the user is already a member in the group;if already a member update the admin status
 
     const user = await User.findOne({ where: { email } });
     const group = await Group.findOne({ where: { groupName } });
+
+    const adminStatus = await userGroup.findOne({
+      where: {
+        admin: true,
+        userId: req.user.id,
+        groupId: group.id,
+      },
+    });
+
+    if (!adminStatus) {
+      console.log("Unauthorized");
+      return res.status(401).json({
+        status: "fail",
+        message: "Unauthorized",
+      });
+    }
 
     if (!user || !group) {
       return res.status(400).json({
@@ -58,8 +76,8 @@ exports.addUserToGroup = async (req, res) => {
       });
     }
 
-    usergroup.update(
-      { isAdmin },
+    await usergroup.update(
+      { admin: isAdmin },
       {
         where: {
           userId: user.id,
