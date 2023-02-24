@@ -155,6 +155,24 @@ const groups = async () => {
 // Showing User the group he belongs to.....
 groups();
 
+// Getting all the groups in which user is admin
+
+const adminGroups = async () => {
+  try {
+    const adminGroups = await axios({
+      method: "GET",
+      url: `${url}/api/v1/group/admin`,
+      headers: { Authorization: token },
+    });
+
+    console.log(adminGroups.data.data.groups);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+adminGroups();
+
 const renderGroups = (groupName, id) => {
   const template = `<button style="margin-top: 10px;" data-id="${id}"  class="btn btn-outline-secondary" >${groupName}</button>`;
 

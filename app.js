@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
+const corn = require("cron");
 
 dotenv.config({ path: "./config.env" });
 
@@ -13,8 +14,9 @@ const messageRouter = require("./Routes/messageRoutes");
 const groupRouter = require("./Routes/groupRoutes");
 const passwordRouter = require("./Routes/passwordRoutes");
 
-// Database
+// Database and other utilities
 const sequelize = require("./utils/database");
+const { archiveChats } = require("./archivechats/archivechats");
 
 // Models
 const User = require("./models/userModel");
@@ -114,3 +116,14 @@ sequelize
   .catch((err) => {
     console.log(err);
   });
+
+// This runs every night at midnight
+const job = new corn.CronJob("0 0 * * *", async () => {
+  try {
+    await archiveChats();
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+job.start();

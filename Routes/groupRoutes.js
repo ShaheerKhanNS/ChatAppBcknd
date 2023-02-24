@@ -6,6 +6,9 @@ const router = express.Router();
 
 router.route("/").get(authController.currentUser, groupController.getAllGroups);
 router
+  .route("/admin")
+  .get(authController.currentUser, groupController.getAdminGroups);
+router
   .route("/creategroup")
   .post(authController.currentUser, groupController.createGroup);
 

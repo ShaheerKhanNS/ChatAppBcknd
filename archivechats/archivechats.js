@@ -1,10 +1,8 @@
-const corn = require("cron");
 const { Op } = require("sequelize");
 const Message = require("../models/messageModel");
 const ArchivedMessage = require("../models/archivedChats");
 
-// This runs every night at midnight
-exports.job = new corn.CronJob("0 0 * * *", async () => {
+exports.archiveChats = async () => {
   try {
     const timeStamp = Date.now();
     const oneDayAgo = new Date(timeStamp - 24 * 60 * 60 * 1000);
@@ -38,4 +36,4 @@ exports.job = new corn.CronJob("0 0 * * *", async () => {
   } catch (err) {
     console.log(err);
   }
-});
+};

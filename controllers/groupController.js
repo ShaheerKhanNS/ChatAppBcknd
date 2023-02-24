@@ -1,7 +1,6 @@
 const Group = require("../models/groupModel");
 const User = require("../models/userModel");
 const UserGroup = require("../models/userGroup");
-const userGroup = require("../models/userGroup");
 
 exports.createGroup = async (req, res) => {
   try {
@@ -37,7 +36,7 @@ exports.addUserToGroup = async (req, res) => {
     const user = await User.findOne({ where: { email } });
     const group = await Group.findOne({ where: { groupName } });
 
-    const adminStatus = await userGroup.findOne({
+    const adminStatus = await UserGroup.findOne({
       where: {
         admin: true,
         userId: req.user.id,
@@ -110,7 +109,7 @@ exports.deleteUser = async (req, res) => {
     const groupId = group.id;
 
     // Check whether the current user has permission to remove
-    const permissionStatus = await userGroup.findOne({
+    const permissionStatus = await UserGroup.findOne({
       where: {
         admin: true,
         groupId,
@@ -127,7 +126,7 @@ exports.deleteUser = async (req, res) => {
           message: "Please check the email-id of the user you provided",
         });
 
-      const removedStatus = await userGroup.destroy({
+      const removedStatus = await UserGroup.destroy({
         where: {
           userId: userToBeRemoved.id,
         },
@@ -169,5 +168,31 @@ exports.getAllGroups = async (req, res) => {
     res.status(500).json({
       status: "fail",
     });
+  }
+};
+
+// Which gets all the group in which the user is admin
+exports.getAdminGroups = async (req, res) => {
+  try {
+    const groups = await User.findOne({
+      where: { id: req.user.id },
+      include: [
+        {
+          model: Group,
+          through: {
+            where: {
+              admin: true,
+            },
+          },
+        },
+      ],
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: groups,
+    });
+  } catch (err) {
+    console.log(JSON.stringify(err));
   }
 };
