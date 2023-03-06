@@ -93,3 +93,13 @@ body {
   border-radius: 6%;
   margin-right: 10px;
 }
+
+#admin-groups {
+  margin-top: 20px;
+}
+
+#admin-group-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}

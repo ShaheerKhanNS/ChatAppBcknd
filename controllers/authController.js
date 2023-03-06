@@ -16,6 +16,3 @@ exports.currentUser = async (req, res, next) => {
     });
   }
 };
-
-//  magic functions need to look
-// req.user.getmessages;

@@ -30,7 +30,7 @@ btnLogin.addEventListener("click", async (e) => {
       alert("please provide your email and password to login❗");
     }
   } catch (err) {
-    document.body.innerHTML += `<p class="container error">${err.message}</p>`;
+    document.body.innerHTML += `<p class="container error">${err.response.data.message}</p>`;
   }
 });
 

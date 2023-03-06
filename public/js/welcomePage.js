@@ -165,7 +165,9 @@ const adminGroups = async () => {
       headers: { Authorization: token },
     });
 
-    console.log(adminGroups.data.data.groups);
+    adminGroups.data.data.groups.forEach((group) => {
+      renderAdminGroups(group.groupName, group.id);
+    });
   } catch (err) {
     console.log(err);
   }
@@ -177,6 +179,19 @@ const renderGroups = (groupName, id) => {
   const template = `<button style="margin-top: 10px;" data-id="${id}"  class="btn btn-outline-secondary" >${groupName}</button>`;
 
   return (groupContainer.innerHTML += template);
+};
+
+const renderAdminGroups = (groupName, id) => {
+  const adminGroupContainer = document.getElementById("admin-group-list");
+  const template = `<button
+              style="margin-bottom: 10px"
+              class="btn btn-outline-dark btn-sm"
+              data-id="${id}"
+              disabled
+            >
+             ${groupName}
+            </button>`;
+  return (adminGroupContainer.innerHTML += template);
 };
 
 // Buttons and Elements for chat container

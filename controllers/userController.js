@@ -45,10 +45,7 @@ exports.createUser = async (req, res) => {
       }
     });
   } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
-    });
+    console.log(err);
   }
 };
 
@@ -77,14 +74,14 @@ exports.login = async (req, res) => {
         } else {
           res.status(401).json({
             status: "fail",
-            message: "UNAUTHORIZED",
+            message: "Wrong Password!",
           });
         }
       });
     } else {
       res.status(404).json({
         status: "fail",
-        message: "User not found",
+        message: "User not found!",
       });
     }
   } catch (err) {

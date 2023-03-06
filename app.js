@@ -54,33 +54,6 @@ app.use("/chat", (req, res) => {
 
 // For handling routes which are not defined
 
-app.all("*", (req, res, next) => {
-  // res.status(404).json({
-  //   status: "fail",
-  //   message: `Can not find the requested ${req.originalUrl} url on this server.`,
-  // });
-
-  const err = new Error(
-    `Can not find the requested ${req.originalUrl} url on this server.`
-  );
-  err.status = "fail";
-  err.statusCode = 404;
-  // When we pass err object to next it will skip all the stacks and moves to error middleware function
-  next(err);
-});
-
-// Express error handling
-
-app.use((err, req, res, next) => {
-  err.statusCode = err.statusCode || 500;
-  err.status = err.status || "fail";
-
-  res.status(err.statusCode).jon({
-    status: err.status,
-    message: err.message,
-  });
-});
-
 User.hasMany(Message);
 Message.belongsTo(User);
 
