@@ -146,7 +146,7 @@ exports.resetPasswordPage = async (req, res) => {
               data: { password },
             });
              alert(response.data.message)
-             window.location.replace("${URL}/login/login.html")
+             window.location.replace("${URL}/chat/login/login.html")
           } else {
             alert("Please provide password");
           }

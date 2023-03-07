@@ -108,7 +108,7 @@ addUserBtn.addEventListener("click", async (e) => {
       clearFields();
     }
   } catch (err) {
-    console.log(`I am in adduser error block ${JSON.stringify(err)}`);
+    alert(err.response.data.message);
   }
 });
 
@@ -129,10 +129,8 @@ dltUserBtn.addEventListener("click", async (e) => {
         email,
       },
     });
-
-    console.log(response);
   } catch (err) {
-    console.log(err);
+    alert(err.response.data.message);
   }
 });
 
