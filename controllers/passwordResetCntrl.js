@@ -4,7 +4,9 @@ const Sib = require("sib-api-v3-sdk");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 
-const URL = "http://127.0.0.1:3000";
+// const URL = "http://127.0.0.1:3000";
+const URL = `http://35.78.245.211:3000`;
+
 
 exports.passwordResetMail = async (req, res) => {
   try {

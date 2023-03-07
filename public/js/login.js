@@ -1,5 +1,6 @@
 const btnLogin = document.getElementById("login");
-const URL = "http://127.0.0.1:3000";
+// const URL = "http://127.0.0.1:3000";
+const URL = `http://35.78.245.211:3000`;
 
 btnLogin.addEventListener("click", async (e) => {
   try {
@@ -22,9 +23,7 @@ btnLogin.addEventListener("click", async (e) => {
         // console.log(response.data.token);
         localStorage.setItem("token", response.data.token);
         alert(response.data.message);
-        window.location.replace(
-          "http://127.0.0.1:3000/chat/welcomepage/welcomePage.html"
-        );
+        window.location.replace(`${URL}/chat/welcomepage/welcomePage.html`);
       }
     } else {
       alert("please provide your email and password to login❗");

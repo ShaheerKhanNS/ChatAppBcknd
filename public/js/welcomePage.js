@@ -12,7 +12,9 @@ const addUserBtn = document.getElementById("btn-add-user");
 const dltUserBtn = document.getElementById("btn-dlt-user");
 
 const token = localStorage.getItem("token");
-const url = "http://127.0.0.1:3000";
+// const url = "http://127.0.0.1:3000";
+const url = `http://35.78.245.211:3000`;
+
 const socket = io(`${url}`);
 
 // Elements

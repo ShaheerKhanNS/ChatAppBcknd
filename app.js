@@ -6,7 +6,8 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const corn = require("cron");
 
-dotenv.config({ path: "./config.env" });
+// dotenv.config({ path: "./config.env" });
+dotenv.config({ path: "./aws.env" });
 
 // Routes
 const userRouter = require("./Routes/userRoutes");
@@ -28,9 +29,14 @@ const userGroup = require("./models/userGroup");
 // Starting app
 const app = express();
 
+// app.use(
+//   cors({
+//     origin: "http://127.0.0.1:3000",
+//   })
+// );
 app.use(
   cors({
-    origin: "http://127.0.0.1:3000",
+    origin: "http://35.78.245.211:3000",
   })
 );
 app.use(express.json());
@@ -41,12 +47,22 @@ app.use("/api/v1/message", messageRouter);
 app.use("/api/v1/group", groupRouter);
 app.use("/api/v1/password", passwordRouter);
 
+// app.use("/chat", (req, res) => {
+//   res
+//     .setHeader(
+//       "Content-Security-Policy",
+
+//       "script-src https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.2/axios.min.js https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js http://127.0.0.1:3000/chat/js/signup.js http://127.0.0.1:3000/chat/js/login.js http://127.0.0.1:3000/chat/js/welcomePage.js http://127.0.0.1:3000/socket.io/socket.io.js",
+//       "img-src  https://img.icons8.com/color/256/weixing.png"
+//     )
+//     .sendFile(path.join(__dirname, `public${req.url}`));
+// });
 app.use("/chat", (req, res) => {
   res
     .setHeader(
       "Content-Security-Policy",
 
-      "script-src https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.2/axios.min.js https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js http://127.0.0.1:3000/chat/js/signup.js http://127.0.0.1:3000/chat/js/login.js http://127.0.0.1:3000/chat/js/welcomePage.js http://127.0.0.1:3000/socket.io/socket.io.js",
+      "script-src https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.2/axios.min.js https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js http://35.78.245.211:3000/chat/js/signup.js http://35.78.245.211:3000/chat/js/login.js http://35.78.245.211:3000/chat/js/welcomePage.js http://35.78.245.211:3000/socket.io/socket.io.js",
       "img-src  https://img.icons8.com/color/256/weixing.png"
     )
     .sendFile(path.join(__dirname, `public${req.url}`));
@@ -75,7 +91,7 @@ sequelize
 
       const io = require("socket.io")(server, {
         cors: {
-          origin: ["http://127.0.0.1:3000"],
+          origin: ["http://35.78.245.211:3000"],
         },
         allowEIO3: true,
       });
