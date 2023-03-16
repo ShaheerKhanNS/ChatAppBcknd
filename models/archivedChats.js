@@ -22,6 +22,7 @@ const ArchivedChat = sequelize.define("archivedchats", {
   },
   deletedAt: {
     type: Sequelize.DATE,
+    defaultValue: new Date(),
     allowNull: false,
   },
   userId: {

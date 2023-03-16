@@ -106,13 +106,9 @@ sequelize
     console.log(err);
   });
 
-// This runs every night at midnight
-const job = new corn.CronJob("0 0 * * *", async () => {
-  try {
-    await archiveChats();
-  } catch (err) {
-    console.log(err);
-  }
+// This runs every mid-night
+const job = new corn.CronJob("00 00 00 * * *", () => {
+  archiveChats();
 });
 
 job.start();
